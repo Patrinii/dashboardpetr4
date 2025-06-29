@@ -6,10 +6,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
-# Função para carregar os dados
 @st.cache_data
 def carregar_dados():
-    return pd.read_csv("petr4.csv")
+    dados = pd.read_csv("petr4.csv")
+    st.write("Colunas carregadas:", dados.columns.tolist())  # Linha útil para debug
+    return dados
 
 # Função para preparar os dados
 def preparar_dados(dados):
