@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 @st.cache_data
 def carregar_dados():
     dados = pd.read_csv("petr4.csv")
-    st.write("Colunas carregadas:", dados.columns.tolist())  # Linha útil para debug
+    
     return dados
 
 # Função para preparar os dados
