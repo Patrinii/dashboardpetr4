@@ -2,10 +2,55 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-from modelo import carregar_dados, preparar_dados, treinar_modelo, avaliar_modelo, simular_retorno
+import yfinance as yf
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
 
 st.set_page_config(page_title="Dashboard PETR4", layout="wide")
+
+@st.cache_data
+def carregar_dados():
+    df = yf.download("PETR4.SA", start="2023-01-01", end="2025-12-31")
+    df = df.reset_index()
+    df['Ano'] = df['Date'].dt.year
+    df['Target'] = (df['Close'].shift(-1) > df['Close']).astype(int)
+    return df
+
+def preparar_dados(df):
+    df['Retorno'] = df['Close'].pct_change()
+    df = df.dropna()
+    return df
+
+def treinar_modelo(treino, teste):
+    colunas = ['Open', 'High', 'Low', 'Close', 'Volume', 'Retorno']
+    X_treino = treino[colunas]
+    y_treino = treino['Target']
+    X_teste = teste[colunas]
+    y_teste = teste['Target']
+
+    scaler = StandardScaler()
+    X_treino_scaled = scaler.fit_transform(X_treino)
+    X_teste_scaled = scaler.transform(X_teste)
+
+    modelo = RandomForestClassifier(n_estimators=100, random_state=42)
+    modelo.fit(X_treino_scaled, y_treino)
+
+    teste_completo = teste.copy()
+    teste_completo['X_scaled'] = list(X_teste_scaled)
+
+    return modelo, X_teste_scaled, y_teste, teste_completo
+
+def avaliar_modelo(modelo, X_teste_scaled, y_teste):
+    return modelo.predict(X_teste_scaled)
+
+def simular_retorno(teste_completo, y_pred):
+    teste_completo['Predito'] = y_pred
+    teste_completo['Retorno'] = teste_completo['Close'].pct_change()
+    teste_completo['Lucro'] = teste_completo['Retorno'] * (teste_completo['Predito'].shift(1))
+    teste_completo = teste_completo.dropna()
+    return teste_completo
 
 # Sidebar
 st.sidebar.title("Configurações")
