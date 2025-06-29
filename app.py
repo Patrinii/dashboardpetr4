@@ -40,7 +40,7 @@ def simular_retorno(teste, y_pred):
 
 # Layout
 st.set_page_config(page_title="Dashboard PETR4", layout="wide")
-st.title("📊 Dashboard de Análise PETR4")
+st.title("Dashboard de Análise PETR4")
 
 # Carregando e preparando os dados
 dados = carregar_dados()
@@ -59,7 +59,7 @@ y_pred = modelo.predict(X_teste)
 teste_completo = simular_retorno(dados_teste, y_pred)
 
 # Métricas
-st.subheader("📈 Métricas de Avaliação")
+st.subheader("Métricas de Avaliação")
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Acurácia", f"{accuracy_score(y_teste, y_pred)*100:.2f}%")
 col2.metric("Precisão", f"{precision_score(y_teste, y_pred)*100:.2f}%")
@@ -78,14 +78,14 @@ ganhos = lucros[lucros > 0].sum()
 perdas = -lucros[lucros < 0].sum()
 retorno_total = lucros.sum()
 
-st.subheader("💰 Retorno Financeiro")
+st.subheader("Retorno Financeiro")
 col1, col2, col3 = st.columns(3)
 col1.metric("Retorno de Ganhos", f"R$ {ganhos:.2f}")
 col2.metric("Retorno de Perdas", f"R$ {perdas:.2f}")
 col3.metric("Retorno Total", f"R$ {retorno_total:.2f}")
 
 # Gráficos
-st.subheader("📊 Gráficos Interativos")
+st.subheader("Gráficos Interativos")
 aba = st.selectbox("Selecione o gráfico", [
     "Gráfico de Fechamento", 
     "Distribuição do Alvo", 
