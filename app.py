@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -6,7 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 st.set_page_config(layout="wide")
-st.markdown("# 📊 Dashboard de Análise PETR4")
+st.markdown("# Dashboard de Análise PETR4")
 
 @st.cache_data
 def carregar_dados():
@@ -65,17 +66,17 @@ col5.metric("Especificidade", f"{metricas['Especificidade']*100:.2f}%")
 
 lucros_teste = df_teste["Profit"].values
 ganhos, perdas, total = simular_retorno(y_teste.values, y_pred, lucros_teste)
-st.subheader("💰 Retorno Financeiro")
+st.subheader("Retorno Financeiro")
 col6, col7, col8 = st.columns(3)
 col6.metric("Retorno de Ganhos", f"R$ {ganhos:.2f}")
 col7.metric("Retorno de Perdas", f"R$ {perdas:.2f}")
 col8.metric("Retorno Total", f"R$ {total:.2f}")
 
-st.subheader("📉 Gráficos Interativos")
+st.subheader("Gráficos Interativos")
 grafico = st.selectbox("Selecione o gráfico", ["Série Temporal Completa", "Distribuição da Variável Alvo"])
 
 if grafico == "Série Temporal Completa":
-    fig = px.line(dados, x="Date", y="Close", title="Preço de Fechamento - PETR4")
+    fig = px.line(dados, x="Date", y="Close", color="Year", title="Preço de Fechamento - PETR4 por Ano")
     st.plotly_chart(fig, use_container_width=True)
 
 elif grafico == "Distribuição da Variável Alvo":
